@@ -1,0 +1,24 @@
+# Create a new type for storing addresses
+CREATE TYPE address (street1 TEXT, street2 TEXT, city TEXT, state TEXT, ZipCode TEXT, country TEXT);
+
+# Create a new type for storing rankings and reviews for an organization
+# Ranking ReviewImages has the image title/name (text), and image filename (text)
+CREATE TYPE review (PriceRating int, rating int, reviewtext text, ReveiwWriter UUID, reviewimages MAP <text,text>)
+
+# Create Keyspace
+CREATE KEYSPACE IF NOT EXISTS AppUser;
+
+# Create AppParent Table in the AppUser Keyspace
+CREATE TABLE IF NOT EXISTS AppUser.AppParent (idParent UUID PRIMARY KEY, userpassword text, loginID text, EmailAddress list <text>, lastname text, firstname text, addresses MAP <TEXT, FROZEN <address>>, Telephone int, NumberOfChildren int, children list <UUID>);
+
+# Create AppChild Tabel in the AppUser Keyspace
+CREATE TABLE IF NOT EXISTS AppUser.AppChild (idChild UUID PRIMARY KEY, idParent UUID, birthday datestamp, );
+
+# Create Organization keyspace
+CREATE KEYSPACE IF NOT EXISTS AppOrganization;
+
+# Create OrgUser table in the AppOrganization keyspace
+CREATE TABLE IF NOT EXISTS AppOrganization.OrgUser (idOrgUser UUID PRIMARY KEY, OrgID UUID, loginID text, userpassword text, lastname text, firstname text,emailaddress list <text>, addresses MAP <TEXT, FROZEN <address>>);
+
+# Create Organization table
+CREATE TABLE IF NOT EXISTS AppOrganization.Organization (OrgID PRIMARY KEY UUID, OrgAddress MAP <TEXT, FROZEN <address>> )
