@@ -33,7 +33,7 @@ gradle-app.setting
 ansible.cfg
 hosts
 *.retry
-
+all
 
 # Packages #
 ############
