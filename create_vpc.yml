@@ -1,12 +1,13 @@
-## tester to validate immutability and scripting of playbooks.
-- name: Create Mesosphere AWS resources
-  hosts: localhost
-  connection: local
-  gather_facts: True
-
-vars:
-  varVPCName: Mesos_Test_VPC
-  aws_region: us-east
-
-
-include_task: create_vpc.yml
+# Create instances to go in the cluster, in the security group above
+# to improve immutability, all inputs are variables that can be defined elsewhere
+-name: Create VPC
+  ec2_vpc_net:
+      aws_access_key: "{{aws_access_key}}"
+      aws_secret_key: "{{aws_secret_key}}"
+      region: "{{aws_region}}"
+      cidr_block: 10.0.0.0/8
+      name: {{varVPCName}}
+      state: present
+      tags:
+        testenvironment: mesos-server
+      register: VPC_information
