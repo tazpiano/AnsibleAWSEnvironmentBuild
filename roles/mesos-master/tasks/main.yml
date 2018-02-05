@@ -1,0 +1,19 @@
+---
+# tasks file for mesos
+
+# Install DC/OS using custom install files
+- name: create tmp directory
+    file:
+      path: /tmp/dcos
+      state: directory
+      mode: 0755
+
+- name: download and execute DC/OS installer script
+  - name: download DC/OS script
+    get_url:
+      url: http://{{bootstrap-ip}}:{{bootstrap_IPport}}/dcos_install.sh
+      dest: /tmp/dcos/dcos_install.sh
+      mode: 0755
+  - name: Execute DC/OS script
+    shell: /tmp/dcos/dcos_install.sh master
+    sudo: yes

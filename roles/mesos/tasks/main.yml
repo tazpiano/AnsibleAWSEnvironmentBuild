@@ -1,2 +1,46 @@
 ---
-# tasks file for mesos
+# tasks file for all servers
+
+- name: disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+# Execute script to install Software requirements and configure servers for Mesos
+ - name: install mesos requirements and configure OS
+    file:
+      path: /tmp/dcos
+      state: directory
+      mode: 0755
+    copy: /files/DCOS_Prep.sh
+      mode: 0755
+    shell: /tmp/dcos/dcos_prep.sh
+    sudo: yes
+
+- name: configure server for docker
+  command: mkfs -t xfs -n ftype=1 /dev/sdc1
+  sudo: yes
+
+- name: Install Docker using the Docker repo
+  yum:
+    name: docker
+    enablerepo: https://yum.dockerproject.org/repo/main/centos/$releasever/
+    state: latest
+
+# Configure systemd to run the Docker Daemon with OverlayFS:
+- name: configure systemd to start docker
+  command: mkdir -p /etc/systemd/system/docker.service.d
+  sudo: yes
+  command: tee /etc/systemd/system/docker.service.d/override.conf <<- EOF
+  sudo: yes
+
+
+# Setup the service
+#- name: get Docker dameon with overlay service going
+
+##sudo mkdir -p /etc/systemd/system/docker.service.d && sudo tee /etc/systemd/system/docker.service.d/override.conf <<- EOF
+##[Service]
+##ExecStart=
+##ExecStart=/usr/bin/dockerd --storage-driver=overlay
+##EOF

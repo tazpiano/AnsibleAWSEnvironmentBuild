@@ -1,11 +1,26 @@
 ---
 # Variables here are applicable to all host groups
 
-mesos_version: 0.20.0-1.0.ubuntu1404
+#Mesosphere config options
+#package published by Mesosphere
+## mesos_version: 0.20.0-1.0.ubuntu1404
 mesos_local_address: "{{ansible_eth0.ipv4.address}}"
-mesos_cluster_name: "Safecare-Mesos"  
+mesos_cluster_name: "Safecare-Mesos"
 mesos_quorum_count: "2"
+
+#Zookeeper Configuration
 zookeeper_client_port: "2181"
 zookeeper_leader_port: "2888"
 zookeeper_election_port: "3888"
 zookeeper_url: "zk://{{ groups.mesos_masters | join(':' + zookeeper_client_port + ',') }}:{{ zookeeper_client_port }}/mesos"
+
+# Choose whether to install Marathon using a Mesosphere package or from GitHub source
+marathon_install_type: "package" # valid options are "package" or "source"
+marathon_pkg_version: 0.6.1-1.1 # if install type is "package" which version to use
+
+#AWS variables
+aws_region: us-east
+##vpc_id: vpc-62b92a04
+##cidr_ip: 76.17.0.124/32 #my current comcast IP addy
+##subnet_id: subnet-b5cf4089
+ami_id:

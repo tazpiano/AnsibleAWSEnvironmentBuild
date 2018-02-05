@@ -1,0 +1,21 @@
+# Create instances to go in the cluster, in the security group above
+# to improve immutability, all inputs are variables that can be defined elsewhere
+  - name: Create Servers
+    ec2:
+      aws_access_key: "{{aws_access_key}}"
+      aws_secret_key: "{{aws_secret_key}}"
+      key_name: "{{key_name}}"
+      region: "{{aws_region}}"
+      vpc_subnet_id: {{vpc_id}}
+      group_id: "{{firewall.group_id}}"
+      instance_type: "{{instance_type}}"
+      image: "{{ami_id}}"
+      wait: yes
+      count: {{HowManyInstances}}
+      instance_tags:
+        servertype: {{varServerType}}
+        OSType: {{vaerOSType}}
+      register: ec2
+   - name: Add all instance public IPs to host group
+     add_host: hostname={{ item.public_ip }} groups=mesos_masters
+     with_items: "{{ ec2.instances }}"

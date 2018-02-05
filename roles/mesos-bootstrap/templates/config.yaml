@@ -1,0 +1,20 @@
+#configuration file for Mesos bootstrap node
+
+bootstrap_url: http://<bootstrap_ip>:<your_port>
+cluster_name: <cluster-name>
+exhibitor_storage_backend: static
+master_discovery: static
+ip_detect_public_filename: <path-to-ip-script>
+master_list:
+- <master-private-ip-1>
+- <master-private-ip-2>
+- <master-private-ip-3>
+resolvers:
+- 8.8.4.4
+- 8.8.8.8
+use_proxy: 'true'
+http_proxy: http://<proxy_host>:<http_proxy_port>
+https_proxy: https://<proxy_host>:<https_proxy_port>
+no_proxy:
+- 'foo.bar.com'
+- '.baz.com'

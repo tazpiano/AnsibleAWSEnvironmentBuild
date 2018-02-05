@@ -1,0 +1,32 @@
+---
+# tasks file for mesos bootstrap server
+#Designed for CentOS7 / RHEL7 based clusters
+#builds Advanced DC/OS Installation
+#https://docs.mesosphere.com/1.10/installing/oss/custom/advanced/
+
+# Tasks for Bootstrap
+- name: Configure Mesos bootstrap
+  # create a directory if it doesn't exist
+    file:
+      path: /tmp/genconf
+      state: directory
+      mode: 0755
+    copy:
+      src: config.yaml
+      dest: /tmp/genconf/config.yaml
+      src: ip-detect
+      dest: /tmp/genconf/ip-detect
+
+- name: download and execute DC/OS installer script
+  - name: download DC/OS script
+    get_url:
+      url: https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh
+      dest: /tmp/dcos_generate_config.sh
+      mode: 0755
+  - name: Execute DC/OS script
+    shell: dcos_generate_config.sh
+    sudo: yes
+
+- name: start NGINX docker container for
+  shell: docker run -d -p <your-port>:80 -v $PWD/genconf/serve:/usr/share/nginx/html:ro nginx
+  sudo: yes

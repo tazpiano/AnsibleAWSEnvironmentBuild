@@ -1,0 +1,12 @@
+## tester to validate immutability and scripting of playbooks.
+- name: Create Mesosphere AWS resources
+  hosts: localhost
+  connection: local
+  gather_facts: True
+
+vars:
+  varVPCName: Mesos_Test_VPC
+  aws_region: us-east
+
+
+include_task: create_vpc.yml

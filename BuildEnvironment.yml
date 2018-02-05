@@ -4,32 +4,33 @@
   connection: local
   gather_facts: False
 
+# Create the security group for the mesos cluster
   tasks:
   - name: Create a security group
     ec2_group:
-      name: ansible
-      description: "Ansible Security Group"
+      name: Mesos_group
+      description: "Mesosphere Security Group"
       region: "{{aws_region}}"
       vpc_id: "{{vpc_id}}"
       aws_access_key: "{{aws_access_key}}"
       aws_secret_key: "{{aws_secret_key}}"
       rules:
         - proto: all
-          cidr_ip: {{cidr_ip}}
+          cidr_ip: {{cidr_ip}} #who has access in?
         - proto: all
-          group_name: ansible
+          group_name: Mesos_group
       rules_egress:
         - proto: all
-          cidr_ip: 0.0.0.0/0
+          cidr_ip: 0.0.0.0/0 #outbound access
     register: firewall
 
-    # Configure an ELB with health check and the access logs
+  # Configure an ELB for the  with health check and the access logs
     - local_action:
         module: ec2_elb_lb
-        name: "test-please-delete"
+        name: "Mesos_master_ext_elb"
         state: present
         zones:
-          - us-east-1d
+          - us-east-1e
         listeners:
           - protocol: http
             load_balancer_port: 80
@@ -63,7 +64,71 @@
           delete_on_termination: true
       exact_count: 6
       count_tag:
-         Name: ansible-demo
+         Name: ansible-Mesos
       instance_tags:
-         Name: ansible-demo
+         Name: ansible-mesos, centos
     register: ec2
+
+# Basic configuration
+
+- ec2_asg:
+    name: special
+    load_balancers: [ 'lb1', 'lb2' ]
+    availability_zones: [ 'eu-west-1a', 'eu-west-1b' ]
+    launch_config_name: 'lc-1'
+    min_size: 1
+    max_size: 10
+    desired_capacity: 5
+    vpc_zone_identifier: [ 'subnet-abcd1234', 'subnet-1a2b3c4d' ]
+    tags:
+      - environment: production
+        propagate_at_launch: no
+
+# Rolling ASG Updates
+
+# Below is an example of how to assign a new launch config to an ASG and terminate old instances.
+#
+# All instances in "myasg" that do not have the launch configuration named "my_new_lc" will be terminated in
+# a rolling fashion with instances using the current launch configuration, "my_new_lc".
+#
+# This could also be considered a rolling deploy of a pre-baked AMI.
+#
+# If this is a newly created group, the instances will not be replaced since all instances
+# will have the current launch configuration.
+
+- name: create launch config
+  ec2_lc:
+    name: my_new_lc
+    image_id: ami-lkajsf
+    key_name: mykey
+    region: us-east-1
+    security_groups: sg-23423
+    instance_type: m1.small
+    assign_public_ip: yes
+
+- ec2_asg:
+    name: myasg
+    launch_config_name: my_new_lc
+    health_check_period: 60
+    health_check_type: ELB
+    replace_all_instances: yes
+    min_size: 5
+    max_size: 5
+    desired_capacity: 5
+    region: us-east-1
+
+# To only replace a couple of instances instead of all of them, supply a list
+# to "replace_instances":
+
+- ec2_asg:
+    name: myasg
+    launch_config_name: my_new_lc
+    health_check_period: 60
+    health_check_type: ELB
+    replace_instances:
+    - i-b345231
+    - i-24c2931
+    min_size: 5
+    max_size: 5
+    desired_capacity: 5
+    region: us-east-1
