@@ -12,5 +12,4 @@
     varVPCName: Mesos_Test_VPC
     aws_region: us-east
 
-
-  include_playbook: create_vpc.yml
+include_playbook: create_vpc.yml
