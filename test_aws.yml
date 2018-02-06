@@ -2,8 +2,9 @@
 # tests AWS resource playbooks and creation
 
 - name: Create Mesosphere AWS resources - test
-  hosts: localhost
+- hosts: localhost
   connection: local
+  gather_facts: True
 
 
   # Variables needed to create the cluster
@@ -12,4 +13,4 @@
     aws_region: us-east
 
 
-- include_playbook: create_vpc.yml
+  include_playbook: create_vpc.yml
