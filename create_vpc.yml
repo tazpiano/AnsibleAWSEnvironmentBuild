@@ -3,11 +3,11 @@
 tasks:
   - name: Create VPC
   - ec2_vpc_net:
-      aws_access_key: "{{aws_access_key}}"
-      aws_secret_key: "{{aws_secret_key}}"
-      region: "{{aws_region}}"
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      region: "{{ aws_region }}"
       cidr_block: 10.0.0.0/8
-      name: {{varVPCName}}
+      name: {{ varVPCName }}
       state: present
       tags:
         testenvironment: mesos-server
