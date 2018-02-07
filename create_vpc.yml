@@ -6,7 +6,7 @@
   connection: local
   tasks:
      - name: Create VPC
-       - ec2_vpc_net:
+       ec2_vpc_net:
          aws_access_key: "{{ aws_access_key }}"
          aws_secret_key: "{{ aws_secret_key }}"
          region: "{{ aws_region }}"
