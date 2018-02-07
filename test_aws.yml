@@ -1,15 +1,18 @@
+---
 # script to test playbook validity
 # tests AWS resource playbooks and creation
-
 - name: Create Mesosphere AWS resources - test
 - hosts: localhost
   connection: local
   gather_facts: True
 
 
-  # Variables needed to create the cluster
-  vars:
-    varVPCName: Mesos_Test_VPC
-    aws_region: us-east
+# Variables needed to create the cluster
+- vars:
+  varVPCName: Mesos_Test_VPC
+  aws_region: us-east
 
-include_playbook: create_vpc.yml
+#playbooks to include
+- include_playbook: create_vpc.yml
+
+...

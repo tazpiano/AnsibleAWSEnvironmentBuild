@@ -1,3 +1,4 @@
+---
 # Create instances to go in the cluster, in the security group above
 # to improve immutability, all inputs are variables that can be defined elsewhere
 - hosts: localhost
@@ -15,3 +16,4 @@
          tags:
            testenvironment: mesos-server
          register: VPC_information
+...
