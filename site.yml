@@ -3,10 +3,12 @@
 # RUN: ansible-playbook --ask-sudo-pass -i hosts site.yml
 
 #part 2 - Install Mesos cluster
+#builds mesos cluster
+include_task: BuildEnvironment.yml
 
 #Part 2a - Build bootstrap node
 
-
+#deploy Mesos servers
 - name: deploy and configure the mesos masters
   hosts: mesos_masters
   sudo: True
