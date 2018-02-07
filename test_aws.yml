@@ -5,14 +5,14 @@
   connection: local
   gather_facts: True
 
-# Variables needed to create the cluster
+  # Variables needed to create the cluster
   vars:
     varVPCName: Mesos_Test_VPC
     aws_region: us-east
 
-- name: Create Mesosphere AWS resources - test
+  - name: Create Mesosphere AWS resources - test
 
-#playbooks to include
-- import_playbook: create_vpc.yml
+  #playbooks to include
+  - import_playbook: create_vpc.yml
 
 ...
