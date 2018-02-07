@@ -5,7 +5,6 @@
   connection: local
   gather_facts: True
 
-
 # Variables needed to create the cluster
   vars:
     varVPCName: Mesos_Test_VPC
