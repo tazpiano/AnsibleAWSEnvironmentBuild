@@ -8,9 +8,9 @@
 
 
 # Variables needed to create the cluster
-- vars:
-  varVPCName: Mesos_Test_VPC
-  aws_region: us-east
+  vars:
+    varVPCName: Mesos_Test_VPC
+    aws_region: us-east
 
 #playbooks to include
 - include_playbook: create_vpc.yml
