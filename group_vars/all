@@ -1,5 +1,8 @@
 ---
 # Variables here are applicable to all host groups
+aws_access_key_id: AKIAJLPIPDXQRXAEUMPA
+aws_secret_access_key: 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
+
 
 #Mesosphere config options
 #package published by Mesosphere
