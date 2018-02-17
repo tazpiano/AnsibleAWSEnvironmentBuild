@@ -31,7 +31,8 @@
            OSType: CentOS7
            EnvID: Development
          register: ec2
-       #Add all instance public IPs to host group
+
+     - name: Add all instance public IPs to host group
        add_host: hostname={{ item.public_ip }} groups=mesos_masters
-       with_items: "{{ ec2.instances }}"
+       ith_items: "{{ ec2.instances }}"
 ...
