@@ -12,6 +12,8 @@
      key_name: CentOS
      instance_type: t2.micro
      ami_id: ami-46c1b650
+   vars_files:
+     group_vars/all
 
    #Create instances to go in the cluster, in the security group above
    tasks:
