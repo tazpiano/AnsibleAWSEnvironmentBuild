@@ -15,7 +15,7 @@
 
    #Create instances to go in the cluster, in the security group above
    tasks:
-     - name: Create the mesos master EC2 instances
+     name: Create the mesos master EC2 instances
        ec2:
          aws_access_key: "{{ aws_access_key }}"
          aws_secret_key: "{{ aws_secret_key }}"
