@@ -9,6 +9,9 @@
   vars:
     varVPCName: Mesos_Test_VPC
     aws_region: us-east
+    key_name:
+    instance_type:
+    ami_id:
 
   name: Create Mesosphere AWS resources - test
 

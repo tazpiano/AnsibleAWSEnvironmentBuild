@@ -1,3 +1,5 @@
+---
+
 # Basic provisioning example
 - name: Create Mesosphere AWS resources
   hosts: localhost
@@ -5,13 +7,13 @@
   gather_facts: True
 
 # Variables needed to create the cluster
-vars:
+- vars:
   varVPCName: Mesos_Test_VPC
   aws_region: us-east
 
 
-include_task: create_vpc.yml
-include_task: create_mesos_master.yml
+- include_task: create_vpc.yml
+- include_task: create_mesos_master.yml
 
 # Create the security group for the mesos cluster
   tasks:
@@ -50,21 +52,22 @@ include_task: create_mesos_master.yml
         servertype: mesos_master
         OSType: CentOS7
       register: ec2
-   - name: Add all instance public IPs to host group
-     add_host: hostname={{ item.public_ip }} groups=mesos_masters
-     with_items: "{{ ec2.instances }}"
+
+  - name: Add all instance public IPs to host group
+    add_host: hostname={{ item.public_ip }} groups=mesos_masters
+    with_items: "{{ ec2.instances }}"
 
   # Configure an ELB for the  with health check and the access logs
-    - local_action:
-        module: ec2_elb_lb
-        name: "Mesos_master_ext_elb"
-        state: present
-        zones:
-          - us-east-1e
-        listeners:
-          - protocol: http
-            load_balancer_port: 80
-            instance_port: 80
+  - local_action:
+      module: ec2_elb_lb
+      name: "Mesos_master_ext_elb"
+      state: present
+      zones:
+        - us-east-1e
+      listeners:
+        - protocol: http
+          load_balancer_port: 80
+          instance_port: 80
 # when we get to health checks I'll enable it
 #        health_check:
 #            ping_protocol: http # options are http, https, ssl, tcp
