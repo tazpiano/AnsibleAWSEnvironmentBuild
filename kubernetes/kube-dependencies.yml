@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: local
   become: yes
   tasks:
    - name: disable SELinux
